@@ -1,7 +1,9 @@
+name: Build and deploy to GitHub Pages
+
 on:
   push:
     branches:
-      - "main" # change to the branch you wish to deploy from
+      - main # Cambia a la rama desde la que deseas desplegar
 
 permissions:
   contents: read
@@ -12,7 +14,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - id: build-publish
-      uses: bitovi/github-actions-react-to-github-pages@v1.2.4
-      with:
-        path: dist # change to your build folder
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Ruby environment
+        uses: ruby/setup-ruby@v1.2.0
+        
+      - name: Install dependencies and build site with Jekyll
+        run: |
+          gem install bundler jekyll --no-document # Instala Bundler y Jekyll si no están disponibles.
+          bundle config set path vendor/bundle # Configura Bundler.
+          bundle install --jobs $(nproc) --retry=3 # Instala dependencias del Gemfile.
+          JEKYLL_ENV=production bundle exec jekyll build --destination ./build # Construye el sitio.
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3.9.1 
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir ./build # Directorio donde se encuentra el sitio construido por Jekyll.
+
