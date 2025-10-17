@@ -26,4 +26,4 @@ export default function Guitar({guitar, addToCart}) {
     )
 }
 
-//ghjjhg
+//ghjjhgfghgfgh{lñ{lñ}}
