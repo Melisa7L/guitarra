@@ -8,7 +8,8 @@ export default function Guitar({guitar, addToCart}) {
 
                 <img 
                     className="img-fluid" 
-                    src={`/img/${image}.jpg`} 
+                    src={`${import.meta.env.BASE_URL}img/${image}.jpg`}
+
                     alt={`Guitarra modelo ${name}`} 
                 />
             </div>
